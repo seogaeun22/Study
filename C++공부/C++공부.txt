@@ -830,3 +830,21 @@ UTF-16도 때론 4바이트로 문자를 인코딩해야하기에 str[i]처럼 �
 다행히 UTF8-CPP 라는 C++에서 여러 방식으로 인코딩 된 문자열을 쉽게 다룰 수 있게 도와주는 라이브러리가 있다. (표준 라이브러리는 아니다.)
 
 ■ string_view
+#include <string>		std::string_view
+
+C++17. 문자열을 읽기만 하는 클래스다. (문자열을 소유하지 않는다.)
+어딘가 존재하는 문자열을 참조해서 읽기만 하기에 string_view가 현재 보고 있는 문자열이 소멸된다면 정의되지 않는 작업(Undefined behavior)이 발생하게 된다.
+
+bool contains_hi(std::string_view str)
+{ return str.find("very") != std::string_view::npos; }
+
+contains_hi("hi hello !!");
+std::string s = "hmmm";
+std::string_view sv = s;
+sv.substr(0,3);
+
+* string_view는 문자열을 소유하지 않기에 현재 읽고 있는 문자열이 소멸되지 않은 상태인지 주의해야 한다. *
+
+• 메모리 할당 불필요, 문자열의 시작 주소값만 복사
+• string_view에서 제공하는 연산들도 원본 문자열을 수정하지 않는 연산들이다. (find, substr(부분 문자열 얻는 함수) )
+특히 string의 경우 substr이 실제 부분 문자열을 새로 생성해야하기에 O(n)으로 수행되지만, string_view의 경우 substr로 또 다른 view를 생성하므로 O(1)로 매우 빠르게 수행된다.
