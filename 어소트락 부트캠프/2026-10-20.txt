@@ -1,0 +1,91 @@
+C:\Users\AR\Documents\Unreal Projects\ERProject
+
+Selection Mode - Landscape Mode
+생성 누르면 Sculpting으로 들어감.
+
+Brush Type을 별모양으로 하면 브러쉬에 텍스쳐를 넣을 수 있다.
+
+Erosion은 침식, Copy는 복산데 지형을 복사해서 배치하고 색칠하면 딱 이 기지모에 따라서만 올라온다.
+
+Quixel Bridge에서 흙 매터리얼 이런거 받을 수 있다. 실사를 카메라로 찍어서 올려주는 회사다.
+
+(Manage-new) Height Map을 이용해서 맵을 만들 수 있다.
+(+ 노멀은 질감.)
+
+높낮이는 landscape의 scale이다.
+
+- interpToMovement
+Behaviour Type: 
+One Shot은 한 번만 가는거
+One Shot Reverse는 반대로
+Loop Reset은 한 방향으로 갔다가 다시 원점에서 그 방향으로 감
+PingPong은 왔다갔다
+
+get control points
+
+Launch Character 
+
+■ 언리얼 MCP 설치
+MCP : 언리얼과 LLM 연결 통로
+ToolSet : 도구 (AllToolSets 활성화하면 모든 도구를 활성화함. 활성화하지 않은 툴은 나중에 따로 켜주면 됨)
+
+1. Unreal MCP, AllToolSets 언리얼 플러그인 활성화 (Edit - Plugins)
+	껐다 킨 다음 오류가 뜨면 오류의 링크를 눌러주기
+
+2. node.js 설치
+		https://nodejs.org/ko/download
+		npm까지 설치 해야한다. 
+
+		설치후 확인 방법
+		cmd 콘솔창에 
+		node -v
+		npm -v
+		확인. 
+
+		ps. 만약 버전이 안나온다면 환경변수 설정을 해줘야한다. 
+
+		시스템 환경 변수 편집
+		-> 환경 변수
+		-> 시스템 변수 / Path
+		-> C:\Program Files\nodejs\ 
+		-> 를 추가한다. 
+
+3. codex cli 설치 
+	npm install -g @openai/codex@latest
+
+	클로드
+	npm install -g @anthropic-ai/claude-code@latest
+
+4. codex 로그인
+codex login
+
+5. 에디터 개인설정 - 모델 컨텍스트 프로토콜 - 포트번호(원하는 숫자. 난 1019), Auto Start Server 켜기
+
+언리얼 cmd에 붙이기
+ModelContextProtocol.GenerateClientConfig All
+
+127.0.0.1 : 자기 로컬 ip 번호
+
+6. 언리얼 프로젝트 있는 곳에서 cmd 실행하고 codex 열기
+	cmd를 관리자 권한으로 실행시키고 cd C:\Users\AR\Documents\Unreal Projects\ERProject
+	이후 codex 치면 됨
+
+/ : 명령어
+$ : 스킬
+
+7. 추가 작업
+Model changed to gpt-5.6-sol medium (모델 변경)
+
+https://github.com/DietrichGebert/ponytail.git
+게으른 개발자 : 답변 정리 최대한 간결하게 해줌 체감 40% 토큰 감소
+
+https://github.com/ciembor/agent-rules-books.git
+소프트공학 개발서적 싹다 모은거. 이 책 기반으로 개발할 때 solid원칙과 객체지향 원칙을 지키고 개발해달라 하면 됨.
+
+스킬 연결하라고 하기
+
+$ponytail 너가 할 수 있는 mcp 일을 다 알려줘.
+라고 치면 ponytail 스킬을 쓰면서 이 답변을 생각하게 된다.
+
+---------
+공포게임에서 루멘 쓰면 간접광때문에 늦게 빛이 보인다...?

@@ -1,0 +1,119 @@
+■ 컴포넌트들
+static mesh component
+skeletal mesh component
+camera component
+spring arm component : 카메라에 부착해서 씀 (target arm length로 길이 조절)
+
+■ 주요 클래스
+게임모드(GameMode) : 레벨에 하나만 존재하는 게임 규칙 정의 클래스
+액터(Actor) : 월드에 배치할 수 있는 모든 오브젝트
+폰(Pawn) : 플레이어 또는 컴퓨터가 조작할 수 있는 액터
+캐릭터(Character) : 이동기능이 추가된 폰
+
+■ 게임 모드
+게임 규칙을 정의하는 클래스
+레벨당 하나만 존재
+우클릭 - 블루프린트 클래스 - game mode base
+
+게임모드에 default pawn class가 있음. 우리가 만든걸로 넣기
+전용 게임모드 지정 : window - world setting - game mode override - 내가 만든 게임모드 지정
+
+■ 입력 시스템
+언리얼 입력방식이 2가지였는데 이제 축 및 액션 매핑은 폐기됨. (기능 폐기는 아니고 새로 만드는건 안됨)
+
+언리얼의 입력 시스템
+• 입력 액션(Input Action) : 키보드, 마우스 등 입력 행동 정의
+• 입력 매핑
+• 입력 매핑 컨텍스트(Context) : 액션과 매핑을 묶어주는 역할
+우클릭 - input - input action (IA_Move 이름 짓기)
+bool은 키가 눌렸나, 안 눌렸나 판단. Axis는 축임.
+
+매핑 컨텍스트는 추가하고 지우고 여러개도 할 수 있음.
+
+input - input mapping context (IMC_DefaultInput )
+매핑 + 누르고 만든 입력 액션 넣음
+사용할 키를 배열에 넣어줌 (그리고 펼치기)
+trigger : 어떤 방식으로 입력을 받아들일지 (기본적인건 none)
+modify : 이 값이 어떻게 들어올 것인지
+
+wasd
+w:그대로 (기본이 x축 +임)
+s : Negate(x,y,z)
+d,a는 스위즐 입력 축값 a는 negate 추가(x,y,z)
+
+보통 입력은 플레이어 컨트롤로 사용함.
+BP_MyCharacter의 이벤트 그래프에서 Get Player Controller로 얻을 수 있다. return value로 끌어다가 Enhanced Input Local Player SubSystem 생성. 또 이어서 끌어다가 add mapping context 함수 만들고, event beginplay에 연결
+
+IA_move를 enhanced로 꺼내면 키가 눌렸으면 얘가 반환된다. 트리거 노드다.
+Action Value에 Break Vector 2D
+
+• Subsystem : 반 매니저 급. 얘를 통해서 너가 내부코드 수정할 수 있게 해줄게. Input Local Player 접근
+
+레벨 시작되면 GameMode 기준으로 가장 먼저 초기화된다.
+멀티게임 하면 서버에만 존재함.
+
+■ 디버깅
+똑같이 블루프린트 함수 클릭하고 F9 누르면 중단점 찍힘
+
+■ 캐릭터
+폰에서 캐릭터 무브먼트 컴포넌트가 추가된 것 (하지만 폰에서 캐릭터 무브먼트 컴포넌트를 이용 못함)
+언리얼에서 캐릭터 세팅 안하면 기본 폰으로 세팅함
+
+언리얼 기본 이동속도는 600이다
+변수의 인스턴스 변경 가능을 키면 레벨에서 수정 가능 (변수 옆 눈알 표시)
+변수에 스폰시 노출을 키면 SpawnActor함수에서 변수를 바로 바꿀 수 있다.
+
+■ 마우스 회전
+spring arm에서 폰 회전 각도를 제어할 수 있다.
+표시명 복사 (블프랑 C++이랑 표시명이 다르다.)
+
+블프에서 if라 치면 branch라 나옴(if를 branch라 부름)
+
+길게 누르기 : 얼마나 길게 눌러야하는지, 얼마나 지속되는지 등 설정가능
+Ongoing(누르는중) Triggered(트리거 발동) Complete(키를 뗄때)
+
+Add Impulse : 어느 방향으로 너가 힘을 줄래
+Impulse z로하면 위로 튕겨올라감.
+Vel Change : 체크하면 무게도 따짐
+
+■ 리비전 컨트롤
+우측 하단에 리비전 컨트롤. SVN 또는 git 연결 가능
+왼쪽에 버전비교가 있음. 예전 버전 비교를 볼 수 있다.
+여기서 저장하는 순간 우리것이 커밋됨.
+리비전 컨트롤 세팅 변경 - 리비전 컨트롤 비활성화 (켜져있으면 어떤 수정하는 순간 add 가 된다.)
+
+공부하기위해서. 세팅하고 수정목록만 보고 되돌릴 때 솔루션 끄고 revert하고 업데이트
+
+■ Turtle SVN
+cleanup 아래 3개 항목 : add 안한 것도 지우고 변경된 것도 지움
+revert : 서버 기준으로 되돌린것
+cleanup : 어떤건 rock 정리, resolved 로그 꼬인것도 정리
+
+블프는 merge가 쉽지 않다. 바이너리 파일이기에. 그래서 깃보다 svn이 좋다.
+
+■ 마우스
+Yaw : z축	좌우보기
+Pitch : y축	위아래보기
+Roll : x축	좌우로 기울기
+
+화면좌표계에서
+마우스 아래로 이동 : y+
+마우스 위로 이동 : y-
+이기에 pitch에 값을 -를 곱해서 해야 잘 됨
+
+■ fab
+프로젝트의 fab에 샀던 에셋이 안뜨면 엔진홈에서 직접 프로젝트 추가가 가능하다.
+https://www.fab.com/limited-time-free
+기간한정무료
+
+■ 콜리젼
+캐릭터는 보통 캡슐모양을 많이 쓴다.
+collision은 box size가 따로 있다. 직접 transform을 변경하지말고(static mesh 사이즈에도 영향감) box size로 조절
+static mesh는 overlap 체크 ㄴㄴ collision만 체크
+collision에서 overlap event create 체크해야함0'; 
+
+■ 변수
+함수 전용 로컬 변수도 있다. 그 위에 변수는 멤버변수다.
+
+■ 이주
+migrate 하면 Asset들 옮길 수 있는데 Content 안에 이주해줘야 정상적으로 이주가 된다.
