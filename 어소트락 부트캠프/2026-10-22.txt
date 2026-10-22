@@ -1,0 +1,48 @@
+위젯에서 유저 인터페이스 - 스페이스 : screen과 world가 있음. screen하면 날 따라오며 잘 보이지만, world는 깊이체크를해서 잘 안 보임.
+
+set visibility 로 모든 인터페이스의 visibility를 끄고, overlab하면 true로 바꿔주게함.
+
+언리얼5부터 Lumen이 들어감. 진짜 환경같은 빛을 만들어줌. 빛이 조금만 있어도 반사돼서 들어오게함. 불 끄면 늦게 반응한것도 lumen에 간접광 딜레이가 있어서 그럼. 공포게임은 lumen을 끄는게 좋다.
+
+Post Process : 후처리
+Post Process Volume. (무한 범위는 Infinite Extent 체크)
+post process material이 있음
+
+또는 플레이어 카메라 자체에 post process를 넣을 수 잇다.
+
+[루멘 끄기]
+Edit - Project Settings - Rendering - Dynamic Global Illumination Method를 none으로, Reflection Method를 Screen Space로
+
+[Depth-Stencil 켜기]
+Project settings - engine - rendering - post process - custum depth-stencil
+디폴트가 1바이트다.
+
+[몬스터 AI 만들기]
+Behavior Tree, Black board
+행동 트리는 그냥 트리구조다.(이진트리아님) AI의 행동을 정의한다.
+node의 우측상단 숫자들이 몇 번째로 실행할지임.
+블랙보드는 자료구조같은 것. 행동트리에서 사용할 변수들을 정의한다.
+
+ai controller를 만들어서 bp클래스의 ai controller class에 내가 만든 ai controller 넣어줘야함.
+
+AI가 돌아다닐 공간인 Navi Mesh Bound Volume을 설치해줘야함.
+
+[노드]
+시퀀스 노드 : 앞에서 순서대로 실행함. 하나라도 실패하면 전체 실패 취급함.
+셀렉터 노드 : 앞에서 순서대로 실행하는데 하나라도 성공하면 성공처리하고 빠져나감.
+
+task 노드 : 실제 AI가 실행할 행동
+
+[task 노드]
+finish execute를 통해 끝맞침을 표현해줘야함.
+
+wait : 랜덤 편차 넣어서 고정된 시간이 아닌 랜덤한 시간동안 쉬게함.
+
+get random reachable point in radius : random locatin을 가지고 나올때 새로운 호출임. static함수니까 값을 가져다 쓰는 순간부터 새로운 호출이다.
+
+[몬스터BP에서 AIPerception Component]
+AIPerception (AI에 인지능력까지 준 것. 좀 더 가벼움. 내가 원하는것만 설정)
+PawnSensing (옛날방식)
+적팀을 탐지하는 컴포넌트 (AI에게 눈코입을 달아줌)
+
+퍼셉션 : 몬스터가 보이는 시야가 어느 각도만큼인지도 알려줌.

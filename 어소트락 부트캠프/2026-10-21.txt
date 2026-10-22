@@ -1,0 +1,50 @@
+블프 생성자 - Construction Script (배치되면 생성되거나 생성됐을 때) 그 후 event begin play 시작됨
+
+C++ 먼저 들어오고 블프 들어옴.
+호출 순서가 C++ Construction -> 블프 Construction -> C++ Event begin play -> 블프 Event begin play
+멀쓰라 가끔 꼬인다. 블프 Construction 하기 전에 C++ Event Begin play가 먼저 호출 될 때도 있어서 spawn할때 문제가 된다.
+
+프로젝트 세팅 - 엔진 - 콜리젼 에서 추가 가능하다.
+콜리젼 세팅은 초반에 잡고 가야함. 나중에 꼬임.
+
+[캐릭터]
+SpringArm에서 Use Pawn Control Rotation 켜주기
+Enable Camera Lag : 속도감 체감가능하게 보임
+
+Animation Bluprint의 EventGraph에서 Cast to Character하면 character 자체가 갖는 함수도 사용 가능, 내가 만든 BP_Character하면 내가 만든 함수만 사용 가능
+
+play anim montage : 단순 실행
+play montage : 실행시킨 결과값이 나옴
+(should stop : 현재 하고 있는 애니메이션 중지하고 몽타주 시작)
+
+[몽타주]
+루트 모션 활성화 하면 애니메이션 자체 이동값 적용됨
+
+[이벤트 그래프]
+나중에 EventGraph만 쓰면 복잡해질 수 있으니 추가해서 쓸 수 있다. + 누르면 됨
+
+Do Once : 막 눌러도 한 번만 실행함. 다시 실행할 수 있다.
+
+[uasset - migrate]
+파일탐색기에서 바로 복사해서 붙여놓으면 안된다.
+다른 프로젝트를 켜서 그 안에서 파일을 우클릭하고 migrate 누른 뒤, 현재 프로젝트의 content를 선택하면 migrate가 된다.
+
+[trace channel]
+충돌 타입을 새로 만들 수 있다.
+edit - project setting - collision - trace channels
+
+[위젯]
+항상 날 따라오게 하면 씬, 위치 고정은 월드로
+
+[언리얼 C++]
+언리얼에서 array가 거의 list처럼 구조를 잡아둠. 양방향리스트
+중간 삽입 삭제 속도가 꽤 잘 나온다.
+array는 가변배열임.(vector)
+
+[부모클래스 바꾸기]
+클래스 세팅 - 부모클래스를 bp Interaction actor로
+
+[flip flop]
+flip flop : 처음에 A나왔다가 B나왔다 A나왔다... 이런걸 알아서 해줌
+
+내부 이름 복사 써서
