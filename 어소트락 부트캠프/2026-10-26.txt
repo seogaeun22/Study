@@ -1,0 +1,53 @@
+■ 인터페이스
+
+언리얼 인터페이스(Interface) : 함수 오버라이드 처럼 동작. 다중상속이다.
+인터페이스 클래스 하나 만들어서 무조건 상속받게 만든 뒤, 오버라이드 할 함수들을 만드는 것이다.
+
+- blueprint interface
+
+우리가 만든 함수 : 상호작용한 인터페이스를 받아옴
+
+class settings - Implemented Interface - Add 클릭해서 우리가 만든 블루프린트 인터페이스 넣으면 이걸 상속하겠다 뜻임.
+
+그러면 왼쪽에 Interfaces가 추가됨. 더블클릭하면 됨.
+
+
+InteractionFunction : 얘 무조건 재정의 되어있다 믿음. 강제 호출
+InteractionFunction(Message) : 인터페이스가 상속되어있으면 인터페이스에 있는 함수 함.
+자식쪽에서 재정의안했을 수도 있는데 한 번더 확인해줌. 함수포인터 걸려있는 거 전부 다 호출해준다.
+Does Object Implement Interface : 이 인터페이스가 있는지 검사하고 싶다.
+
+인터페이스 장점
+- 부모 클래스를 똑같이 만들 필요가 없다.
+
+우클릭 - context sensitives 끄면 전부 나온다.. 켜면 관련 애들만 나오고
+
+쿼리 : 물리 충돌 빼고 단순 충돌만하겠다
+콜리젼 : 둘다 충돌
+
+■ enum
+Enumeration
+
+■ 자식 블루프린트 클래스
+BP 클래스 우클릭해서 자식 클래스 만들면 됨. 우측위에 누가 부모인지 뜸
+
+■ SpawnActor
+Default : 충돌위치는 스폰안함
+Always : 항상 스폰. 충돌 무시
+
+■ 스태틱 메쉬
+스태틱 메쉬 들어가서 소켓 메니저에서 위치를 조절할 수 있다.
+
+■ Destroy Actor
+메모리에서 바로 사라지지 않는다. 61초의 1번씩 가비지 콜렉터를 함. (모아서 한 번에 버림)
+
+set life span : 시간초를 지정함. 몇 초 뒤에 소멸시킴
+
+■ Anim notify state
+범위로 둠. 오버라이드로 Begin(시작), End(끝), Tick(그사이) 위주로 씀
+
+그냥 notify로 해도된다.
+
+
+----------
+
