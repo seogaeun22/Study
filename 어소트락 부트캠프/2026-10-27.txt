@@ -1,0 +1,33 @@
+
+인덱스 순서 : enum값 순서
+
+■ 사운드
+
+oudio - advanced - sound class (마스터, BGM, SFX 생성)
+master에서 child classes로 나머지 사운드들 넣어주기
+
+oudio - legacy - sound class mix (사운드 섞어주는 거임)
+열어서 sound class effects에 만든 3개 클래스 넣어줌
+
+그냥 사운드는 wave 파일
+사운드 - 우클릭 - 사운드 큐 생성 (편집이 가능함)
+열어서 sound class에 어떤 사운드인지 넣으면 됨. SC_SFX 등
+
+---
+
+project settings - map&mode - game instance class 에 게임 인스턴스 블프클래스 넣기
+
+---
+
+■ sequence 노드
+Then 0 -> Then 1 -> ...
+0번부터 순차 실행 (한 번만)
+Then0에서 delay를 사용하더라도 sequence는 기다리지 않고 Then1을 실행한다.
+
+
+---
+■ mesh
+단순 콜리젼으로 되어있으면 문이 통과가 안됨. mesh - detail - collision complex를 Use Complex Collision As Simple 복잡한 콜리젼을 단순 콜리젼처럼 사용할 거야.
+
+■ 네비게이션
+Modify로 특정 구간을 막을 수 있다.
