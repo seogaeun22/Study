@@ -1,0 +1,31 @@
+<WBP>
+Level 새로 만들고 pawn도 만들기(폰에는 카메라만 추가) 게임모드베이스도 만들어서 디폴트폰 설정
+Fill Screen : 풀 스크린
+어떻게 구성할래 : palette
+
+canvas panel : 배경 어떻게 구상할지. 위치 및 크기 조정 가능
+
+overlay : 중첩될 때 씀. 정렬로 유지됨. 맞춰두면 해상도가 아무리 변해도 scale도 어느정도 유지가 됨. 정렬이니까.
+
+canvas는 화면 크기가 달라지면 위치가 달라짐. 앵커를 기준으로 따라간다. 가운데로 유지하고 싶으면 앵커를 가운데로 두면 된다.
+
+디테일하게 잡을거다 - 캔버스
+디자인이 심플하다 - 오버레이
+
+구조는 위에서부터 순차적으로 그림
+
+세로박스는 균일하게 세로로 채워짐
+버튼은 크기를 지정하고 싶으면 lapping에서 크기박스로 감싸면 됨. child layout에 width랑 height override키면 원하는 만큼 버튼 크기를 만들 수 있다.
+
+UI가 완성되면 폰으로 들어가서
+create widget - Ref Ending Widget 변수 생성 - Add to Viewport
+zOrder : UI가 그려지는 순서
+
+UI가 치우쳐져있으면 앵커 문제다.
+
+버튼을 변수로 만들기 designet - details에 변수 이름 쓰고 is variable 클릭 또는 이벤트가 이미 많이 만들어져있음. 클릭시로 하면 Onclliked
+
+Quit Game : 게임 종료''
+모든 폰트 ㅍ이스 로딩 완료시.
+
+WBP에서 +애니메이션 만들기
