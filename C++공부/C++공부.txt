@@ -1048,3 +1048,101 @@ const MyString&이 좌측값과 우측값 모두 받을 수 있다는 점에서 
 ▶ C++11부터 제공하는 우측값 레퍼런스
 
 ■ 우측값 레퍼런스
+
+MyString::MyString(MyString&& str)
+{
+	string_length = str.string_length;
+	string_content = str.string_content;
+	
+	str.string_content = nullptr;	// 임시 객체 소멸 시에 메모리를 해제하지 못하게 한다.
+}
+
+▶ 우측값 레퍼런스를 정의하기 위해서는 좌측값과 달리 &를 두 개 사용해서 정의한다.
+
+str 자체는 좌측값이다. (실체가 있기 때문. str이라는 이름)
+str은 타입이 'MyString의 우측값 레퍼런스'인 좌측값이다. 따라서 표현식의 좌측에 올 수도 있다. str.string_content = nullptr;처럼.
+
+임시 객체의 string_content 가 가리키는 메모리를 새로 생성되는 객체의 메모리로 옮겨주기만 하면 된다.
+(기존의 복사 생성자는 문자열 전체를 새로 복사해야 했지만, 이동 생성자의 경우 단순히 주소값 하나만 달랑 복사해주면 끝이기에 매우 간단하다.)
+
+중요한 점은, 인자로 받은 임시 객체가 소멸되면서 자신이 가리키고 있던 문자열을 delete하지 못하게 해야한다. 따라서 str.string_content = nullptr; 해준다.
+
+그리고 소멸자도 바꿔줘야 한다. string_content가 nullptr이 아닐 때에만 delete하도록 한다.
+
+MyString::~MyString()
+{ if(string_content) delete[] string_content; }
+
+
+int a;
+int& l_a = a;
+int& ll_a = 3;;	// 불가능
+
+int&& r_b = 3;
+int&& rr_b = a;	// 불가능
+
+▶ 우측값의 레퍼런스의 경우 반드시 우측값의 레퍼런스만 가능하다.
+r_b의 경우 우측값 '3'의 레퍼런스가 될 수 있지만, rr_b의 경우 a가 좌측값이기 때문에 컴파일 되지 않는다.
+
+▶ 우측값 레퍼런스는 레퍼런스 하는 임시 객체가 소멸되지 않도록 붙들고 있는다.
+MyString&& str3 = str1 + str2;
+str3이 str1+str2에서 리턴되는 임시 객체의 레퍼런스가 되면서 그 임시 객체가 소멸되지 않도록 한다.
+
+■ 이동 생성자 작성 시 주의할 점
+
+▶ 이동 생성자를 반드시 noexcept로 명시해야 한다.
+
+복사 생성자를 사용했을 때 원소가 하나씩 복사된다. 복사되는 과정에서 예외가 발생하면 새로 할당해놓은 메모리를 소멸시켜 버린 후, 사용자에게 예외를 전달하면 된다.
+
+이동 생성하는 과정에서 예외가 발생하면, 이동 생성의 경우 기존의 메모리에 원소들이 모두 이동되어서 사라져버렸기에, 새로 할당한 메모리를 섯불리 해제할 수 없다.
+
+따라서 vector의 경우 이동 생성자에서 예외가 발생하였을 때 이를 제대로 처리할 수 없고 C++의 다른 컨테이너들도 동일하다.
+
+이 때문에 vector는 이동 생성자가 noexcept가 아닌 경우 이동 생성자를 사용하지 않는다.
+
+■ 더 세부적인 값
+C++에서는 값의 종류를 lvalue, rvalue로만 구분하지 않는다.
+C++11부터 크게 lvalue, xvalue, prvalue 3가지 기본 범주로 구분하고, 이를 묶어서 glvalue, rvalue라는 총 5가지 용어를 사용한다.
+
+glvalue --> lvalue, xvalue
+rvalue --> xvalue, prvalue
+
+• lvalue	식별 가능한 객체나 함수			a, *ptr
+• xvalue	자원을 재사용할 수 있는 값			std::move(a)
+• prvalue	값을 계산하거나 객체를 초기화하는 값	10, a + b
+• glvalue	lvalue + xvalue
+• rvalue	xvalue + prvalue
+
+lvalue : 일반적으로 이름이 있는 변수는 lvalue이다.
+int a = 10;
+int b = a;
+a = 20;
+a,b는 lvalue이고 a를 여러 번 참조하거나 수정할 수 있다.
+
+xvalue(eXpiring Value) : 객체를 식별할 수 있으면서, 그 객체의 자원을 재사용할 수 있는 표현식
+대표적인 예: std::move()
+std::string a = "Hello";
+std::string b = std::move(a);
+std::move(a)가 xvalue이다. std::move(a) 자체가 데이터를 이동시키지는 않는다. 이동생성자가 선택되면 a의 자원을 b로 이동시킬 수 있다.
+
+즉, std::move(a)는 a를 이동 가능한 값으로 취급하도록 표현식의 값 범주를 바꾸는 것이다.
+std::move 이후에도 a객체는 살아있다. 실제 이동이 발생했다면 이동 후 상태는 유효하지만 값이 정해져 있지 않을 수 있다.
+
+prvalue(Pure Right Value) : 값을 계산하거나 객체를 초기화하는 표현식
+int a = 10;
+int b = a + 20;
+10, 20, a+20은 prvalue 이다. (a는 lvalue)
+prvalue는 일반적인 비상수 좌측값 참조(T&)에 바인딩할 수 없다.
+
+glvalue(Generalized Left Value) : lvalue + xvalue. 둘 다 객체나 함수를 식별할 수 있다는 공통점이 있다.
+
+rvalue : prvalue + xvalue. 둘 다 우측값 참조(T&&)에 바인딩할 수 있다.
+
+우측값 참조도 lvalue가 될 수 있다.
+int a = 10;
+int&& ref = std::move(a);
+a, ref는 lvalue, std::move(a)와 std::move(ref)는 xvalue이다.
+
+변수의 타입과 표현식의 값 범주는 서로 다른 개념이기에 ref의 타입은 int&&여도 lvalue이다.
+ref는 우측값 참조 타입이지만, 이름이 있는 변수이기 때문에 ref라는 표현식은 lvalue가 되는 거다.
+
+■ move 문법과 완벽한 전달
