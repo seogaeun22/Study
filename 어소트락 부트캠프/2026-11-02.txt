@@ -67,3 +67,5 @@ CreateDefaultSubobject는 생성자 전용 함수다. BeginPlay에서 쓰면 오
 
 언리얼에서 cast는 Cast하나밖에 없다. (C++는 4개였음)
 형변형 실패하면 nullptr 반환
+
+헤더 추가할 때 generatred.h 위에 추가해줘야한다. 안 그러면 정상적인 빌드가 되지 않는다.
