@@ -1,0 +1,97 @@
+UCLASS()가 뭔지 : 언리얼 클래스 등록, 에디터 쓸 수 있다. 내가 쓰는 클래스다 인식한다.
+
+GENRATED_BODY가 뭔지, : UCLASS랑 세트. 여기서부터 내가 선언해서 사용하는 애들이다.
+
+VSPROEJCT_API가 뭔지 : 그냥 프로젝트 이름
+
+UCALSS쓰면 generated.h 헤더가 포함됨.
+DECLARE_LOG_CATEGORY_EXTERN(CBLog, Log, All); : 카테고리 쓴거
+
+----------
+gamemode base에서 추가적인 기능을 지닌게 gamemode이다.
+
+Log("Fire::Not Cool Time"); 처럼 앞에 어느 부분에서 나온 로그인지 알아보게 할 수 있다. Fire
+
+■ Set Timer - 블프
+Set Timer by Event : Event를 연결해서 Time을 정해줌. 예를들어 0.5면 0.5초마다 이벤트를 실행
+Looping 키면 반복실행된다.
+Initial Start Delay time : 초기 딜레이 시간
+타이머에 핸들이 있다. return value가 timer handle이다.
+
+이 타이머를 나중에 끄고 싶으면 Clear 호출해줘야함. 그 Clear를 호출하기 위해 핸들이 있어야함. 핸들이 없으면 멈출 수 있는 방법이 없다.
+
+Set Timer by Function Name : 이와 같은 방식으로 함수
+
+■ Set Timer - C++
+#include "TimerManager.h"
+C++에서도 타이머 사용할 수 있다.
+타이머 핸들이 있어야한다. (추후에 조작할거면 멤버 변수로 들고 있어야함.)
+
+GetWorldTimerManager().SetTimer()
+SetTimer안에 <void(void)> 형태여야함.
+SetTimer 함수가 오버로딩 방식이 12개다. [1of12] 이런거 뒷쪽 숫자가 오버로딩 몇 개인지 알려줌.
+
+타임매니저 관리할거고 타임 매니저가 타이머를 셋해줌.
+
+게임 스레드에 타이머도 포함되어있다. (별도 스레드가 아니다.
+
+[첫번째 방식]
+멤버 변수로 만들기
+
+[두번째 방식]
+람다함수
+
+
+캐릭터가 죽을 수도 있다 -> this가 날라갈 수 있다.
+this가 날라가더라도 weak가 아니면 이 타이머 함수가 안사라진다. 근데 이 람다는 this를 쓸 수 밖에 없음. weak는 this가 사라진 순간 타이머핸들도 날라감. weak가 아닌 것은 타이머핸들이 살아 있다.
+CreateWeakLambda : 
+CreateLambda : 
+waek로 했을때 this가 죽으면 매니저가 관리하는 속성값이 사라진다.
+
+람다는 함수 객체임. 메모리에 올림. 편안함을 위해 메모리를 매번 호출하는 것.
+
+FTimerDelegate 형식의 람다를 만들면 this 캡쳐해두면 this가 있는지 아닌지 체크해주는 기능까지 제공해준다. 
+
+Delegate : 특정 시점에 함수 포인터를 걸어서 바인드해서 호출해주는 것의 형식을 제공해주는 것
+
+■ EndPlay : 액터가 삭제될때
+
+■ 언리얼 enum
+UENUM()
+enum class EProjectileType : uint8
+{
+	NORMAL UMETA(DisplayName = "일반탄"),
+	HOMING UMETA(DisplayName = "호밍탄"),
+	BOUNCE UMETA(DisplayName = "바운스탄"),
+	EXPLOSION UMETA(DisplayName = "폭발탄")
+};
+
+■ Game Play Static
+Set Game Paused 이런 대부분 언리얼 함수들이 Game Play Static에 있다.
+Game Play Static 헤더를 가져와서 이런 함수를 찾아주면 된다.
+#include  "Kismet/ 머엿지
+
+GetAllActorsWithTag
+
+■ ctrl shift v
+
+
+■ 오버랩 함수
+생성자에서 오버랩 시작시 함수를 바인드 해준다.
+OnComponentBeginOverlap도 일종의 구조체 . 하고 여기에 맞는 함수를 걸어준다. .AddDynamic();
+
+생성자가 아닌 begin 이후(포함) 해야 등록이 된다.
+AddUniqueDynamic은 객체랑 함수들 중복 처리를 막아준다. 
+.h에서
+UFUNCTION()
+void OnProjectileOverlapBegin(함수이름은 아무렇게나 지어도 된다.)
+(
+UPrimitiveComponent* OverlappedComponent,
+AActor* OtherActor,
+UPrimitiveComponent* OtherComponent,
+int32 OtherBodyIndex
+bool bFromSweep,
+const FHitResult& SweepResult
+);
+
+이 오버랩 구조체에다가 이 함수를 걸어주겠다.(AddDynamic) 그리고 안에 내가 만든 함수도 넣어줌.                           
