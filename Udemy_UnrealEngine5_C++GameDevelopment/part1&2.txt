@@ -1,0 +1,231 @@
+언리얼 5.7부터 2026버전 Visual Studio 써야한다.
+
+Visual Studio에서
+.NET Multi-platform App UI development
+.NET desktop development
+Desktop development with C++
+Game development with C++
+워크로드 설치하기
+
+Windows 10 SDK (10.0.18362.0) 버전 이상 설치
+Unreal Engine installer도 설치
+C++ profiling tools, MSVC AddressSanitizer도 있는지 확인
+
+언리얼에서 visual studio 버전을 선택하고 싶다면 Editor Preferences - Source Code에서 에디터 버전 바꾸기
+=> 그 후 Tools - Refresh Visual Studio 누르면 새로 고침됨
+
+프로젝트를 컴파일하려면 편집기를 종료해야 한다.
+빌드 구성이 Development Editor인지 확인한다. 그 후 빌드한다.
+
+언리얼 에디터를 열고 Output Log를 클릭 후 Dock in Layout을 선택한다.
+그러면 출력 로그가 화면에 도킹되어 항상 볼 수 있다.
+
+UE_LOG(LogTemp, Display, TEXT("HELLO")); : 로그 카테고리, 로그 출력 수준, 문자열
+
+추가 구성 요소 설치하라면 하면 됨
+
+C++는 범용 프로그래밍 언어, 소스 코드, 컴파일해야 에디터 내에서 실행. 훨씬 빠름
+Blueprint는 언리얼 에디터에 내장된 스크립팅 시스템
+
+서로 보완해서 사용해야함.
+블루프린트를 사용하여 작성한 C++ 코드를 확장할 수 있지만 그 반대의 경우는 불가능 하다. (블프는 C++ 코드에 액세스 가능, C++은 블프에 엑세스 불가능)
+
+13번 강의 리소스 링크로 Q&A 가능
+
+TestLevel 만들기.
+Eidt - Project Setting - Maps & Modes에서 Editor Startup Map에 설정해줘야 다시 껐다 켜도 TestLevel로 들어와짐.
+
+[Geometry Brushes]
+Gemoetry - Box 길게 누른채로 드래그
+우측에 Brush Settings이 있음.
+
+Brusy Type을 Subtractive(빼기)로 하면 다른 Geometry Box랑 겹치면 그 부분이 빠짐.
+움직이면 즉석으로 업데이트됨.
+
+Cylinder 는 Sides로 각을 조절할 수 있음.
+
+경고가 뜨면 Project Settings에 shadow map을 검색해서 shadow Map Method를 Shadow Maps로 변경하면 됨.
+
+Geometry의 Stair(계단)이 있음. 브러시 설정에서 Step Length:길이, Height:높이, Width: 넓이, Num Steps 걸음수, Add to First Step 추가도 가능.
+
+
+■ [C++ 클래스]
+Tools - New C++ Class
+이름 : MovingPlatform
+언리얼 개발자들은 앞글자랑, 띄어쓰기부분을 대문자로 하는게 일반적인 규칙이다.
+
+추가하면 cpp, h 파일 추가되고 프로젝트를 자동 컴파일한다.
+
+클래스 이름 앞에 A가 붙는거는 언리얼의 명명 규칙이다. 이것이 액터임을 나타낸다.
+
+: public AActor 는 부모 클래스
+
+BeginPlay() : 이 액터가 게임에 들어오거나 게임에 스폰될 때 호출되는 특수한 유형의 함수
+
+UE_LOG(LogTemp, Display, TEXT("Your messasge"));
+
+에디터 끄고 현재 프로젝트 우클릭 - rebuild하고 다시 uuproject 열기
+
+■ live coding
+에디터를 종료하지 않고 Visual Studio를 사용하지 않고도 프로젝트를 컴파일 할 수 있다.
+
+점3개짜리 들어가서 Enable Live Coding 있음
+
+몇 가지 문제를 불러올 수 있다.
+C++ 파일을 변경할 때 라이브 코딩을 사용하는 것이 가장 좋다.
+헤더파일을 변경하는 경우 VS에서 컴파일하는 것이 좋다.
+헤더파일 변경해도 작동하지만 너무 많이 변경하면 어느 순간 이상한 방식으로 작동한다.
+
+작업 세션의 시작 또는 종료 시점에 VS에서 컴파일해야한다.
+
+언리얼 에디터에서 Build Eorror뜨면 어느 부분에서 잘못되었는지 파악할 수 있다.
+
+■ Variables and Data Types
+
+■ Logging Variables
+로그 안에 변수 넣기
+
+로그는 실제로 함수가 아닌 매크로다.
+
+UE_LOG()
+1. 로그 카테고리 (ex: LogTemp는 임시 로그)
+
+2. 중요도
+Display : 흰색
+Warning : 노란색
+Error : 빨간색
+
+3. 텍스트
+TEXT("")
+
+int num = 10;
+UE_LOG(LogTemp, Display, TEXT("Num : %d"), num);
+%가 변수 배치, d가 정수 의미
+%f : float
+%s : FString (FString의 경우 %s, *s 로 받아야함. UE_LOG가 원하는 문자열 형식으로 변환해줌)
+
+---GPT 검색---
+언리얼에서는 std::string보다 FString을 많이 쓴다. 언리얼 API와 잘 맞고, 문자 인코딩 및 플랫폼별 처리를 언리얼 방식으로 해 주기 때문이다. FName이나 FText도 자주 쓴다.
+
+UE_LOG의 형식 문자열은 const TCHAR* 형태의 문자열을 받는다.
+*를 붙이면 FString 안의 문자열을 const TCHAR*로 꺼낸다.
+----------------
+
+■ Number Operations
+
+■ Operator Precedence
+
+■ Member Variables
+
+UPROPERTY 매크로 : 편집기 내에서 이 변수를 보고 편집할 수 있다.
+UPROPERTY(EditAnywhere) 언리얼 엔진 내에서 이 변수를 볼 수 있으므로 VS로 돌아가서 다시 컴파일할 필요 없이 편집할 수 있다.
+
+VisibleAnywhere : 어디서나 표시 사용(편집 불가. 디폴트 값은 보이지만 수정이 안된다.)
+
+세미콜론 필요 없음
+
+UPROPERTY(EditAnywhere)
+float MyFloat = 10.0f;
+
+저렇게 저장하고 컴파일하면 에디터 디테일 패널에서 변수가 나타난걸 볼 수 있다. 거기에 값을 넣으면 디폴트값이 사라짐.
+
+*주의*
+헤더를 변경한 상태에서 라이브코딩을 사용하다가 편집기를 종료하고 다시 열면 모든 변경 사항을 잃게 된다. VS 컴파일을 이용하면 이런 일을 줄일 수 있다.
+
+■ Structs
+
+FVector : 이미 언리얼에서 정의된 벡터. X,Y,Z를 대문자로 접근함.
+FVector fv = FVector(1.1f, 2.2f, 3.3f);
+fv.X;
+
+■ SetActorLocation
+
+액터에 추가하는 첫 번째 컴포넌트는 Root Component가 된다.
+Details 패널에 +Add 눌러서 추가 가능
+
+지금 MovingPlatform에 에셋이 없으므로 자리 표시자로 큐브 만들기 (+Add 하고 Cube)
+
+좌표는 우클릭 copy로 X,Y,Z 좌표를 얻을 수 있음.
+
+BeginPlay()에서
+
+FVector TestVector = FVector(-20, 640, 390);
+SetActorLocation(TestVector);
+
+이러면 시작하자마자 플랫폼이 저 위치에 텔레포트됨.
+
+■ Tick
+
+모든 게임과 게임 엔진은 게임 루프를 사용하여 작동한다.
+(지속적으로 실행되고 게임을 업데이트하는 루프)
+
+1. Get input : 게임 또는 게임 엔진은 플레이어로부터 입력을 받는다. (키보드, 마우스, 컨트롤러)
+
+2. Update game state : 입력이 처리되면 엔진이나 게임에서 게임 상태를 업데이트 한다.
+(변수 설정, 함수 호출, 게임 이벤트 일어나게 함, 게임에서 그래픽을 이미지로 화면에 렌더링 함)
+
+이것을 반복함.
+
+Frame : 게임 루프의 각 사이클
+컴퓨터나 CPU는 가능한 빨리 루프를 실행하려고 한다.
+따라서 경우에 따라 초당 수백 번씩 게임 루프를 실행할 수도 있다.
+
+FPS : 초당 프레임 수 (1초당 프레임 수). CPU 속도에 따라 달라질 수 있다.
+
+Tick() : 게임의 모든 프레임에서 호출되는 특별한 기능. 각 프레임에서 틱 호출됨. FPS에 따라서 초당 최대 6070회까지 반복해서 수행됨.
+
+틱은 캐릭터가 삭제되거나 게임이 종료될 때까지 또는 액터가 삭제될 때까지 계속 호출된다.
+
+프레임마다 호출됨.
+
+■ Comments
+주석
+
+■ GetActorLocation
+
+GetActorLocation() : 액터 현재 위치를 알려줌. SetActorLocation과 마찬가지로 언리얼 엔진 라이브러리에서 제공됨.
+
+위치를 FVector로 리턴함.
+
+CurrentLocation = GetActorLocation();
+일반적으로 Get 함수는 인자를 받지 않음.
+
+■ Delta Time
+
+Deltatime 변수를 사용하여 게임 프레임 속도를 독립적으로 만들 수 있다.
+
+이전의 움직이는 발판 문제 = 속도 문제
+컴퓨터마다 게임 실행 속도가 다르다. 빠른 컴퓨터는 100FPS, 느린 컴퓨터는 30FPS 실행할 수 있음. Tick 함수 내에서 값을 더하거나 빼는 경우 문제가 발생할 수 있다. 다른 컴퓨터에서 어떤놈은 1초에 100cm 어떤놈은 1초에 30cm 움직인다.
+
+이를 해결하게 위해 DeltaTime이라는 특수 변수를 사용한다.
+
+Delta Time : CPU가 게임의 마지막 프레임을 계산하는 데 걸린 시간
+
+게임 루프
+1. Get input
+2. Update game state
+3. Render graphics to the screen
+이 모든 작업을 수행하는 것은 본질적으로 게임의 한 프레임을 계산하는 것이다. 마지막 프레임에 대해 이를 계산하는 데 걸리는 시간(초)를 델타 시간이라고 한다.
+
+따라서 틱 내부에 이와 같은 연산이 있을 때마다 추가하는 값에 델타 시간을 곱하여 코드 프레임 속도를 독립적으로 만들면 프레임 속도에 관계없이 코드가 동일하게 실행된다.
+
+Tick(float DeltaTime)
+{ CurrentLocation.X = CurrentLocation.X + (1*DeltaTime); }
+언리얼 자체에서 입력으로 제공되는 함수의 인자로 들어감.
+
+빠른 컴퓨터 : 델타 시간이 짧아짐. 100FPS면 delta time은 0.01초
+느린 컴퓨터 : 델타 시간이 길어짐. 10FPS면 delta time은 0.1초
+
+빠컴 : 1초에 100cm움직임. => 100에 0.01을 곱하면 1cm
+느컴 : 1초에 10cm 움직임. => 10에 0.1을 곱하면 1cm
+
+두 방정식에 각각의 델타 시간을 곱하면 같은 숫자가 나온다.
+
+명심해야 할 점 : Delta Time을 사용하기 시작하자마자 수치가 급격히 감소한다. (빠컴의 경우 100cm -> 1cm이 됨)
+
+따라서 1초에 몇 cm를 움직이고 싶은지 생각하고 그에 따라 값을 변경해야 한다. (100*DeltaTime 하면 1초에 100cm 움직임)
+
+■ Velocity
+
+■ Functions
+(계속...)
