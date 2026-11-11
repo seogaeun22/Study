@@ -228,4 +228,9 @@ Tick(float DeltaTime)
 ■ Velocity
 
 ■ Functions
-(계속...)
+멤버 함수 내부에 있는 일부 기능은 멤버 함수 외 함수 내부에서 사용할 수 없다. void MyTestFunc() 같은 함수.
+
+GetActorLocation() 는 우리가 선택한 부모 클래스에서 제공하는 함수다. (AActor가 부모. 액터에 내장된 기능이 제공됨)
+
+■ Function Parameters
+(계속_)
